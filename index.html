@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドット絵変換ツール</title>
+    <!-- Google Analytics (GA4) タグをここに挿入してください -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+    <style>
+        :root {
+            --primary-color: #6577B3;
+            --primary-hover: #54649b;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        .upload-box {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            background-color: #f9fafb;
+        }
+
+        .upload-box:hover {
+            border-color: var(--primary-color);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .slider-value {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: #fff;
+            outline: none;
+        }
+
+        .download-settings {
+            display: flex;
+            gap: 10px;
+        }
+
+        .download-settings > div {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+            min-height: 250px;
+            position: relative;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            image-rendering: pixelated;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            position: absolute;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        /* 点を削除し、適度な間隔（gap）でリンクを配置 */
+        .footer-links {
+            text-align: center;
+            margin-top: 4px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        /* 広告モーダル */
+        .ad-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .ad-modal-content {
+            background: #fff;
+            padding: 24px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .ad-container {
+            width: 100%;
+            min-height: 250px;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .ad-close-btn {
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .ad-close-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* 初回訪問時案内（ウェルカムモーダル） */
+        .welcome-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+        }
+
+        .welcome-modal-content {
+            background: #fff;
+            padding: 28px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .welcome-modal-content h2 {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .welcome-modal-content p {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            line-height: 1.6;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ドット絵メーカー</h1>
+
+        <!-- 画像アップロード -->
+        <div class="upload-box" onclick="document.getElementById('imageLoader').click();">
+            <span class="upload-label" id="uploadLabel">📁 画像を選択またはドラッグしてください</span>
+            <input type="file" id="imageLoader" accept="image/*">
+        </div>
+
+        <!-- スライダー設定群 -->
+        <div class="controls">
+            <div class="control-group">
+                <div class="slider-header">
+                    <label for="pixelSizeRange">ドットの細かさ</label>
+                    <span class="slider-value" id="pixelSizeValue">-- px</span>
+                </div>
+                <input type="range" id="pixelSizeRange" min="10" max="150" value="32" oninput="processImage()" disabled>
+            </div>
+
+            <div class="control-group">
+                <div class="slider-header">
+                    <label for="colorCountRange">色数（減色処理）</label>
+                    <span class="slider-value" id="colorCountValue">32 色</span>
+                </div>
+                <input type="range" id="colorCountRange" min="2" max="64" value="32" oninput="processImage()" disabled>
+            </div>
+        </div>
+
+        <!-- プレビュー表示エリア -->
+        <div class="canvas-container" id="canvasContainer">
+            <span class="placeholder-text" id="placeholderText">プレビューがここに表示されます</span>
+            <canvas id="pixelCanvas"></canvas>
+        </div>
+
+        <!-- 保存ボタンのすぐ上に配置するダウンロード形式・解像度の選択 -->
+        <div class="download-settings" id="downloadSettingsContainer" style="display: none;">
+            <div class="control-group">
+                <label for="fileFormat">ファイル形式</label>
+                <select id="fileFormat" onchange="updateDownloadLink()">
+                    <option value="image/png">PNG (推奨)</option>
+                    <option value="image/jpeg">JPEG</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="outputScale">保存サイズ</label>
+                <select id="outputScale" onchange="updateDownloadLink()">
+                    <option value="original">ドット絵の原寸 (小さめ)</option>
+                    <option value="scaled" selected>SNS・鑑賞用 (綺麗に拡大)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ダウンロードボタン -->
+        <a id="downloadBtn" class="btn" style="display: none;" onclick="triggerDownload()">ドット絵を保存する</a>
+
+        <!-- 各種ポリシー・ヘルプへのリンク（中央寄せ・点なし） -->
+        <div class="footer-links">
+            <a href="privacy.html">プライバシーポリシー</a>
+            <a href="ad-help.html">広告表示について</a>
+        </div>
+    </div>
+
+    <!-- 初回訪問時案内（ウェルカムモーダル） -->
+    <div id="welcomeModal" class="welcome-modal">
+        <div class="welcome-modal-content">
+            <h2>ようこそ！ドット絵メーカーへ</h2>
+            <p>当サイトは、お持ちの画像を簡単にレトロなドット絵に変換して保存できる無料ツールです。</p>
+            <p>サービスの継続および運営のため、作品のダウンロード3回に1回、スポンサーリンク（広告）が表示されます。あらかじめご了承ください。</p>
+            <button class="btn" onclick="closeWelcomeModal()">はじめる</button>
+        </div>
+    </div>
+
+    <!-- 3回に1回表示される広告モーダル -->
+    <div id="adModal" class="ad-modal">
+        <div class="ad-modal-content">
+            <h3>スポンサーリンク</h3>
+            <div class="ad-container" id="adContainer">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            <button class="ad-close-btn" onclick="closeAdAndDownload()">広告を閉じてダウンロードする</button>
+        </div>
+    </div>
+
+    <script>
+        const imageLoader = document.getElementById('imageLoader');
+        const pixelCanvas = document.getElementById('pixelCanvas');
+        const ctx = pixelCanvas.getContext('2d');
+        const placeholderText = document.getElementById('placeholderText');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const pixelSizeRange = document.getElementById('pixelSizeRange');
+        const pixelSizeValue = document.getElementById('pixelSizeValue');
+        const colorCountRange = document.getElementById('colorCountRange');
+        const colorCountValue = document.getElementById('colorCountValue');
+        const fileFormat = document.getElementById('fileFormat');
+        const outputScale = document.getElementById('outputScale');
+        const downloadSettingsContainer = document.getElementById('downloadSettingsContainer');
+        const adModal = document.getElementById('adModal');
+        const welcomeModal = document.getElementById('welcomeModal');
+        
+        let uploadedImage = null;
+        let lastProcessedCanvas = null;
+        let downloadCount = parseInt(localStorage.getItem('pixelDownloadCount') || '0', 10);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const hasVisited = localStorage.getItem('pixelHasVisited');
+            if (!hasVisited) {
+                welcomeModal.style.display = 'flex';
+            }
+        });
+
+        function closeWelcomeModal() {
+            localStorage.setItem('pixelHasVisited', 'true');
+            welcomeModal.style.display = 'none';
+        }
+
+        imageLoader.addEventListener('change', handleImage, false);
+
+        function handleImage(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    uploadedImage = img;
+                    placeholderText.style.display = 'none';
+                    pixelSizeRange.disabled = false;
+                    colorCountRange.disabled = false;
+                    downloadSettingsContainer.style.display = 'flex';
+                    processImage();
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function processImage() {
+            if (!uploadedImage) return;
+
+            const maxResolution = parseInt(pixelSizeRange.value);
+            const maxColors = parseInt(colorCountRange.value);
+
+            const srcWidth = uploadedImage.width;
+            const srcHeight = uploadedImage.height;
+            let destWidth, destHeight;
+
+            if (srcWidth >= srcHeight) {
+                destWidth = maxResolution;
+                destHeight = Math.max(1, Math.round(maxResolution * (srcHeight / srcWidth)));
+            } else {
+                destHeight = maxResolution;
+                destWidth = Math.max(1, Math.round(maxResolution * (srcWidth / srcHeight)));
+            }
+
+            pixelSizeValue.textContent = `${destWidth} × ${destHeight} px`;
+            colorCountValue.textContent = `${maxColors} 色`;
+
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = destWidth;
+            tempCanvas.height = destHeight;
+
+            tempCtx.drawImage(uploadedImage, 0, 0, destWidth, destHeight);
+
+            const imgData = tempCtx.getImageData(0, 0, destWidth, destHeight);
+            const data = imgData.data;
+            const factor = 256 / maxColors;
+
+            for (let i = 0; i < data.length; i += 4) {
+                data[i]     = Math.floor(Math.round(data[i] / factor) * factor);
+                data[i + 1] = Math.floor(Math.round(data[i + 1] / factor) * factor);
+                data[i + 2] = Math.floor(Math.round(data[i + 2] / factor) * factor);
+                if (fileFormat.value === 'image/jpeg' && data[i + 3] < 255) {
+                    data[i] = 255; data[i + 1] = 255; data[i + 2] = 255; data[i + 3] = 255;
+                }
+            }
+            tempCtx.putImageData(imgData, 0, 0);
+
+            lastProcessedCanvas = tempCanvas;
+
+            const displayScale = Math.max(4, Math.floor(300 / Math.max(destWidth, destHeight)));
+            pixelCanvas.width = destWidth * displayScale;
+            pixelCanvas.height = destHeight * displayScale;
+
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(tempCanvas, 0, 0, pixelCanvas.width, pixelCanvas.height);
+
+            downloadBtn.style.display = 'block';
+        }
+
+        function triggerDownload() {
+            if (!lastProcessedCanvas) return;
+
+            downloadCount++;
+            localStorage.setItem('pixelDownloadCount', downloadCount.toString());
+
+            if (downloadCount % 3 === 0) {
+                adModal.style.display = 'flex';
+            } else {
+                executeDownload();
+            }
+        }
+
+        function closeAdAndDownload() {
+            adModal.style.display = 'none';
+            executeDownload();
+        }
+
+        function executeDownload() {
+            const format = fileFormat.value;
+            const scaleOption = outputScale.value;
+            const extension = format === 'image/jpeg' ? 'jpg' : 'png';
+
+            let exportCanvas = lastProcessedCanvas;
+
+            if (scaleOption === 'scaled') {
+                const scale = Math.max(10, Math.floor(800 / Math.max(lastProcessedCanvas.width, lastProcessedCanvas.height)));
+                const scaledCanvas = document.createElement('canvas');
+                const scaledCtx = scaledCanvas.getContext('2d');
+                scaledCanvas.width = lastProcessedCanvas.width * scale;
+                scaledCanvas.height = lastProcessedCanvas.height * scale;
+
+                scaledCtx.imageSmoothingEnabled = false;
+                
+                if (format === 'image/jpeg') {
+                    scaledCtx.fillStyle = '#FFFFFF';
+                    scaledCtx.fillRect(0, 0, scaledCanvas.width, scaledCanvas.height);
+                }
+
+                scaledCtx.drawImage(lastProcessedCanvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
+                exportCanvas = scaledCanvas;
+            } else if (format === 'image/jpeg') {
+                const jpegCanvas = document.createElement('canvas');
+                const jpegCtx = jpegCanvas.getContext('2d');
+                jpegCanvas.width = lastProcessedCanvas.width;
+                jpegCanvas.height = lastProcessedCanvas.height;
+                jpegCtx.fillStyle = '#FFFFFF';
+                jpegCtx.fillRect(0, 0, jpegCanvas.width, jpegCanvas.height);
+                jpegCtx.drawImage(lastProcessedCanvas, 0, 0);
+                exportCanvas = jpegCanvas;
+            }
+
+            const dataUrl = exportCanvas.toDataURL(format, 0.9);
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = `pixel-art.${extension}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function updateDownloadLink() {
+            if (uploadedImage) {
+                processImage();
+            }
+        }
+    </script>
+</body>
+</html>
