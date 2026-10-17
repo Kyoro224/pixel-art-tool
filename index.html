@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S8BRP1XN4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S8BRP1XN4G');
+</script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ドット絵変換ツール</title>
@@ -24,47 +35,54 @@
             padding: 0;
         }
 
+        /* PC・タブレット・スマホ全対応：大枠を画面中央に配置 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            padding: 30px;
+            padding: 20px;
         }
 
+        /* アプリ本体のコンテナ枠 */
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             background: var(--card-bg);
-            padding: 24px;
+            padding: 28px;
             border-radius: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
             display: flex;
             flex-direction: column;
             gap: 20px;
+            margin: auto;
         }
 
+        /* タイトル文字（中央揃え） */
         h1 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             text-align: center;
             color: var(--text-color);
+            font-weight: 700;
         }
 
+        /* 画像アップロードエリア */
         .upload-box {
             border: 2px dashed var(--border-color);
             border-radius: 16px;
-            padding: 20px;
+            padding: 24px;
             text-align: center;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
             background-color: #f9fafb;
         }
 
         .upload-box:hover {
             border-color: var(--primary-color);
+            background-color: #f0f4ff;
         }
 
         input[type="file"] {
@@ -72,15 +90,17 @@
         }
 
         .upload-label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
             cursor: pointer;
+            word-break: break-all;
         }
 
+        /* コントロール（スライダー）群 */
         .controls {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
         }
 
         .control-group {
@@ -117,11 +137,13 @@
             font-size: 0.9rem;
             background: #fff;
             outline: none;
+            cursor: pointer;
         }
 
+        /* ダウンロード設定（ファイル形式・解像度） */
         .download-settings {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .download-settings > div {
@@ -131,6 +153,7 @@
             gap: 4px;
         }
 
+        /* プレビュー表示キャンバスエリア */
         .canvas-container {
             display: flex;
             justify-content: center;
@@ -138,7 +161,7 @@
             background: #e5e7eb;
             border-radius: 16px;
             overflow: hidden;
-            min-height: 250px;
+            min-height: 260px;
             position: relative;
         }
 
@@ -155,9 +178,10 @@
             position: absolute;
         }
 
+        /* ボタン */
         .btn {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background-color: var(--primary-color);
             color: white;
             border: none;
@@ -165,7 +189,7 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
             text-align: center;
             text-decoration: none;
             display: block;
@@ -175,12 +199,16 @@
             background-color: var(--primary-hover);
         }
 
+        .btn:active {
+            transform: scale(0.99);
+        }
+
         .btn:disabled {
             background-color: var(--border-color);
             cursor: not-allowed;
         }
 
-        /* 点を削除し、適度な間隔（gap）でリンクを配置 */
+        /* フッターリンク（中央寄せ・点なし） */
         .footer-links {
             text-align: center;
             margin-top: 4px;
@@ -210,6 +238,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -241,13 +270,14 @@
         }
 
         .ad-close-btn {
-            padding: 10px;
+            padding: 12px;
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
 
         .ad-close-btn:hover {
@@ -263,6 +293,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
             justify-content: center;
             align-items: center;
             z-index: 1100;
@@ -291,6 +322,20 @@
             color: var(--text-color);
             line-height: 1.6;
             text-align: left;
+        }
+
+        /* スマホ向けのレイアウト微調整 */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            .download-settings {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -373,16 +418,10 @@
         <div class="ad-modal-content">
             <h3>スポンサーリンク</h3>
             <div class="ad-container" id="adContainer">
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
+                
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1272821680172047"
+     crossorigin="anonymous"></script>
+                
             </div>
             <button class="ad-close-btn" onclick="closeAdAndDownload()">広告を閉じてダウンロードする</button>
         </div>
