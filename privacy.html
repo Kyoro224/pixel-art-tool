@@ -3,20 +3,19 @@
 <head>
     
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S8BRP1XN4G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S8BRP1XN4G"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-S8BRP1XN4G');
-</script>
+      gtag('config', 'G-S8BRP1XN4G');
+    </script>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プライバシーポリシー</title>
-    <!-- Google Analytics (GA4) タグをここに挿入してください -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+    <title>プライバシーポリシー - ドット絵メーカー</title>
+
     <style>
         :root {
             --primary-color: #6577B3;
@@ -47,47 +46,60 @@
 
         .container {
             width: 100%;
-            max-width: 680px;
+            max-width: 480px;
             background: var(--card-bg);
-            padding: 32px;
+            padding: 24px;
             border-radius: 24px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 16px;
         }
 
         h1 {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             text-align: center;
             color: var(--text-color);
-            margin-bottom: 4px;
         }
 
-        section {
+        /* 縦スクロールで見やすくまとめるエリア */
+        .policy-content {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding-right: 4px;
         }
 
-        h2 {
-            font-size: 1.1rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 6px;
+        .policy-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .policy-content::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 4px;
         }
 
-        p, ul {
-            font-size: 0.9rem;
-            color: var(--text-color);
-            line-height: 1.7;
-        }
-
-        ul {
-            padding-left: 20px;
+        .section-card {
             display: flex;
             flex-direction: column;
             gap: 6px;
+            background-color: #f9fafb;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .section-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
         .back-btn {
@@ -95,20 +107,26 @@
             width: 100%;
             padding: 12px;
             font-size: 0.95rem;
-            background-color: #f3f4f6;
-            color: var(--text-muted);
+            background-color: var(--primary-color);
+            color: white;
             border: none;
             border-radius: 12px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
             transition: background-color 0.2s;
-            margin-top: 10px;
+            margin-top: 4px;
         }
 
         .back-btn:hover {
-            background-color: #e5e7eb;
-            color: var(--text-color);
+            background-color: var(--primary-hover);
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            color: var::text-muted;
+            color: var(--text-muted);
+            text-align: center;
         }
     </style>
 </head>
@@ -116,31 +134,65 @@
 
     <div class="container">
         <h1>プライバシーポリシー</h1>
+        
+        <div class="policy-content">
+            <div class="section-card">
+                <div class="section-title">1. 個人情報の取り扱いについて</div>
+                <div class="section-desc">
+                    当アプリ（ドット絵メーカー）では、ユーザーのメールアドレス等の個人情報を直接収集・保有することはいたしません。
+                </div>
+            </div>
 
-        <section>
-            <h2>当サイトに掲載されている広告について</h2>
-            <p>当サイトでは、第三者配信の広告サービス（例：Googleアドセンス、Amazonアソシエイトなど）を利用する場合があります。このような広告配信事業者は、ユーザーの興味に応じた商品やサービスの広告を表示するため、当サイトや他サイトへのアクセスに関する情報「Cookie」（氏名、住所、メール アドレス、電話番号は含まれません）を使用することがあります。</p>
-            <p>Googleアドセンスに関して、Cookieを無効にする方法や詳細については<a href="https://policies.google.com/technologies/ads?hl=ja" target="_blank" rel="noopener">Googleのポリシーと規約ページ</a>をご確認ください。</p>
-        </section>
+            <div class="section-card">
+                <div class="section-title">2. アップロード画像・データの処理について</div>
+                <div class="section-desc">
+                    当アプリでドット絵変換のために読み込まれた画像データ等は、お使いのブラウザ内（クライアント側）でのみ処理されます。外部のサーバーへ画像が送信・保存されることは一切ありません。
+                </div>
+            </div>
 
-        <section>
-            <h2>当サイトが使用しているアクセス解析ツールについて</h2>
-            <p>当サイトでは、アクセス解析ツール「Googleアナリティクス」を利用しています。このGoogleアナリティクスはトラフィックデータの収集のためにCookieを使用しています。このトラフィックデータは匿名で収集されており、個人を特定するものではありません。</p>
-            <p>この機能はCookieを無効にすることで収集を拒否することが出来ますので、お使いのブラウザの設定をご確認ください。詳細については<a href="https://marketingplatform.google.com/about/analytics/terms/jp/" target="_blank" rel="noopener">Googleアナリティクス利用規約</a>のページをご確認ください。</p>
-        </section>
+            <div class="section-card">
+                <div class="section-title">3. アクセス解析ツールについて</div>
+                <div class="section-desc">
+                    当アプリでは、利用状況の把握やサービス改善を目的として、Googleによるアクセス解析ツール<b>「Google Analytics（GA4）」</b>を利用しています。<br><br>
+                    Google Analyticsは、トラフィックデータの収集のためにCookie（クッキー）を使用しています。このデータは匿名で収集されており、個人を特定するものではありません。
+                </div>
+            </div>
 
-        <section>
-            <h2>免責事項</h2>
-            <p>当サイトからリンクやバナーなどによって他のサイトに移動された場合、移動先サイトで提供される情報、サービス等について一切の責任を負いません。</p>
-            <p>当サイトのコンテンツ・情報について、できる限り正確な情報を提供するように努めておりますが、誤情報が入り込んだり、情報が古くなっていることもございます。当サイトに掲載された内容によって生じた損害等の一切の責任を負いかねますのでご了承ください。</p>
-        </section>
+            <div class="section-card">
+                <div class="section-title">4. Cookieの無効化について</div>
+                <div class="section-desc">
+                    お使いのブラウザの設定でCookieを無効にすることにより、データ収集を拒否することができます。詳細は<a href="https://marketingplatform.google.com/about/analytics/terms/jp/" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color);">Google Analytics利用規約</a>をご確認ください。
+                </div>
+            </div>
 
-        <section>
-            <h2>プライバシーポリシーの変更について</h2>
-            <p>当サイトは、個人情報に関して適用される日本の法令を遵守するとともに、本ポリシーの内容を適宜見直しその改善に努めます。修正された最新的なプライバシーポリシーは常に本ページにて開示されます。</p>
-        </section>
+            <div class="section-card">
+                <div class="section-title">5. 免責事項</div>
+                <div class="section-desc">
+                    当アプリの変換結果や動作について、可能な限り動作確認を行っておりますが、その完全性を保証するものではありません。<br><br>
+                    当アプリの利用によって生じた損害やトラブル等について、開発者は一切の責任を負いかねますのであらかじめご了承ください。
+                </div>
+            </div>
 
-        <a href="javascript:history.back()" class="back-btn">前のページに戻る</a>
+            <div class="section-card">
+                <div class="section-title">6. 著作権について</div>
+                <div class="section-desc">
+                    当アプリに掲載されているデザイン、構成、およびソースコード等の著作権は開発者に帰属します。無断転載や再配布等は禁止しております。
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">7. お問い合わせ・ご意見</div>
+                <div class="section-desc">
+                    当アプリに関するご意見や不具合のご報告は、開発者プロフィールに掲載されているマシュマロ（質問箱）よりお寄せください。
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-btn">ドット絵メーカーに戻る</a>
+
+        <div class="footer-note">
+            制定日：2026年10月18日
+        </div>
     </div>
 
 </body>
