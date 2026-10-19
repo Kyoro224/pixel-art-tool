@@ -353,6 +353,7 @@
         
         let uploadedImage = null;
         let lastProcessedCanvas = null;
+        let isProcessingActive = false; // 変換済み・作業中フラグ
 
         window.addEventListener('DOMContentLoaded', () => {
             const hasVisited = localStorage.getItem('pixelHasVisited');
@@ -368,6 +369,14 @@
 
         imageLoader.addEventListener('change', handleImage, false);
 
+        // ページを離れる・閉じる際の警告イベント
+        window.addEventListener('beforeunload', (event) => {
+            if (isProcessingActive) {
+                event.preventDefault();
+                event.returnValue = ''; // 標準ブラウザ警告を表示
+            }
+        });
+
         function handleImage(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -381,6 +390,7 @@
                     pixelSizeRange.disabled = false;
                     colorCountRange.disabled = false;
                     downloadSettingsContainer.style.display = 'flex';
+                    isProcessingActive = true; // 画像が読み込まれて作業が始まったら警告を有効化
                     processImage();
                 }
                 img.src = event.target.result;
